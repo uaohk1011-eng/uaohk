@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 手機適配 -->
   <title>Ka 日本自駕行程查詢面板</title>
   <style>
     body {
@@ -9,16 +10,20 @@
       background: #f9f9f9;
       color: #2c3e50;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
+      line-height: 1.5;
     }
     h1 {
       text-align: center;
       color: #34495e;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      font-size: 1.4em;
     }
     h2 {
       color: #2980b9;
-      margin-top: 40px;
+      margin-top: 25px;
+      font-size: 1.2em;
+      text-align: center;
     }
     a {
       color: #e74c3c;
@@ -31,20 +36,26 @@
     .alert {
       color: #c0392b;
       font-weight: bold;
-      margin-top: 15px;
+      margin-top: 10px;
       text-align: center;
+      font-size: 1em;
+    }
+    .table-container {
+      overflow-x: auto; /* 手機可橫向滑動表格 */
     }
     table {
       border-collapse: collapse;
       width: 100%;
-      margin-top: 20px;
+      margin-top: 15px;
       background: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 0.85em;
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 10px;
+      padding: 8px;
       text-align: center;
+      white-space: nowrap; /* 避免文字換行 */
     }
     th {
       background-color: #3498db;
@@ -54,25 +65,27 @@
       background-color: #f1f1f1;
     }
     button {
-      padding: 6px 12px;
+      padding: 8px 12px;
       margin: 2px;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       background-color: #27ae60;
       color: #fff;
       cursor: pointer;
+      font-size: 0.9em;
       transition: background 0.3s;
     }
     button:hover {
       background-color: #2ecc71;
     }
     .section {
-      margin-top: 40px;
+      margin-top: 25px;
     }
     .copy-btn {
       display: flex;
       justify-content: center;
       gap: 5px;
+      flex-wrap: wrap; /* 手機自動換行 */
     }
   </style>
 </head>
@@ -83,9 +96,9 @@
   <div class="section">
     <h2>即時路況查詢</h2>
     <p style="text-align:center;">
-      🔗 <a href="https://www.jartic.or.jp/" target="_blank">JARTIC 日本道路交通情報中心 (日文)</a> |
-      <a href="https://www.c-nexco.co.jp/zh-CHT/" target="_blank">NEXCO 中日本 (繁體中文)</a> |
-      <a href="https://global.w-nexco.co.jp/tw/" target="_blank">NEXCO 西日本 (繁體中文)</a>
+      🔗 <a href="https://www.jartic.or.jp/" target="_blank">JARTIC (日文)</a><br>
+      🔗 <a href="https://www.c-nexco.co.jp/zh-CHT/" target="_blank">NEXCO 中日本 (繁體中文)</a><br>
+      🔗 <a href="https://global.w-nexco.co.jp/tw/" target="_blank">NEXCO 西日本 (繁體中文)</a>
     </p>
     <div id="alertBox" class="alert"></div>
   </div>
@@ -93,76 +106,80 @@
   <!-- 行程 IC 對照表 -->
   <div class="section">
     <h2>行程 IC 對照表</h2>
-    <table>
-      <tr>
-        <th>日期</th><th>路線</th><th>高速道路</th><th>出入口 (中文)</th><th>入口 (英文)</th><th>出口 (英文)</th><th>複製</th>
-      </tr>
-      <tr>
-        <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>吹田IC / 豊中IC → 宇治西IC</td>
-        <td>Suita IC / Toyonaka IC</td><td>Uji-Nishi IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Suita IC')">入口</button>
-          <button onclick="copyText('Uji-Nishi IC')">出口</button>
-        </td>
-      </tr>
-      <tr>
-        <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>宇治西IC → 津IC</td>
-        <td>Uji-Nishi IC</td><td>Tsu IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Uji-Nishi IC')">入口</button>
-          <button onclick="copyText('Tsu IC')">出口</button>
-        </td>
-      </tr>
-      <tr>
-        <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>津IC → 勢和多氣IC</td>
-        <td>Tsu IC</td><td>Seiwa-Taki IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Tsu IC')">入口</button>
-          <button onclick="copyText('Seiwa-Taki IC')">出口</button>
-        </td>
-      </tr>
-      <tr>
-        <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>勢和多氣IC → 鳥羽IC</td>
-        <td>Seiwa-Taki IC</td><td>Toba IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Seiwa-Taki IC')">入口</button>
-          <button onclick="copyText('Toba IC')">出口</button>
-        </td>
-      </tr>
-      <tr>
-        <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>鳥羽IC → 勢和多氣IC</td>
-        <td>Toba IC</td><td>Seiwa-Taki IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Toba IC')">入口</button>
-          <button onclick="copyText('Seiwa-Taki IC')">出口</button>
-        </td>
-      </tr>
-      <tr>
-        <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>勢和多氣IC → 吹田IC / 豊中IC</td>
-        <td>Seiwa-Taki IC</td><td>Suita IC / Toyonaka IC</td>
-        <td class="copy-btn">
-          <button onclick="copyText('Seiwa-Taki IC')">入口</button>
-          <button onclick="copyText('Suita IC')">出口</button>
-        </td>
-      </tr>
-    </table>
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>日期</th><th>路線</th><th>高速道路</th><th>出入口 (中文)</th><th>入口 (英文)</th><th>出口 (英文)</th><th>複製</th>
+        </tr>
+        <tr>
+          <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>吹田IC / 豊中IC → 宇治西IC</td>
+          <td>Suita IC / Toyonaka IC</td><td>Uji-Nishi IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Suita IC')">入口</button>
+            <button onclick="copyText('Uji-Nishi IC')">出口</button>
+          </td>
+        </tr>
+        <tr>
+          <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>宇治西IC → 津IC</td>
+          <td>Uji-Nishi IC</td><td>Tsu IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Uji-Nishi IC')">入口</button>
+            <button onclick="copyText('Tsu IC')">出口</button>
+          </td>
+        </tr>
+        <tr>
+          <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>津IC → 勢和多氣IC</td>
+          <td>Tsu IC</td><td>Seiwa-Taki IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Tsu IC')">入口</button>
+            <button onclick="copyText('Seiwa-Taki IC')">出口</button>
+          </td>
+        </tr>
+        <tr>
+          <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>勢和多氣IC → 鳥羽IC</td>
+          <td>Seiwa-Taki IC</td><td>Toba IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
+            <button onclick="copyText('Toba IC')">出口</button>
+          </td>
+        </tr>
+        <tr>
+          <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>鳥羽IC → 勢和多氣IC</td>
+          <td>Toba IC</td><td>Seiwa-Taki IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Toba IC')">入口</button>
+            <button onclick="copyText('Seiwa-Taki IC')">出口</button>
+          </td>
+        </tr>
+        <tr>
+          <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>勢和多氣IC → 吹田IC / 豊中IC</td>
+          <td>Seiwa-Taki IC</td><td>Suita IC / Toyonaka IC</td>
+          <td class="copy-btn">
+            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
+            <button onclick="copyText('Suita IC')">出口</button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 
   <!-- CEP 5日券資訊 -->
   <div class="section">
     <h2>CEP 5日券資訊</h2>
-    <table>
-      <tr>
-        <th>中文名稱</th><th>英文名稱</th><th>天數</th><th>費用</th><th>使用範圍</th>
-      </tr>
-      <tr>
-        <td>中日本高速公路周遊券</td>
-        <td>Central Nippon Expressway Pass (CEP)</td>
-        <td>5日</td>
-        <td>約 10,000–12,000 日圓</td>
-        <td>東名、名神、新名神、伊勢灣岸道、伊勢道</td>
-      </tr>
-    </table>
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>中文名稱</th><th>英文名稱</th><th>天數</th><th>費用</th><th>使用範圍</th>
+        </tr>
+        <tr>
+          <td>中日本高速公路周遊券</td>
+          <td>Central Nippon Expressway Pass (CEP)</td>
+          <td>5日</td>
+          <td>約 10,000–12,000 日圓</td>
+          <td>東名、名神、新名神、伊勢灣岸道、伊勢道</td>
+        </tr>
+      </table>
+    </div>
     <p style="text-align:center;">官方資訊：<a href="https://www.c-nexco.co.jp/cep/" target="_blank">NEXCO 中日本 CEP 官方頁面 (中文)</a></p>
   </div>
 
@@ -176,6 +193,7 @@
         document.getElementById("alertBox").innerText = "";
       }
     }
+    // 每 5 秒自動檢查一次
     setInterval(checkRoadStatus, 5000);
 
     // 複製功能
