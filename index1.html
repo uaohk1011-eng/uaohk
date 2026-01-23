@@ -13,74 +13,45 @@
       padding: 15px;
       line-height: 1.5;
     }
-    h1 {
-      text-align: center;
-      color: #34495e;
-      margin-bottom: 20px;
-      font-size: 1.4em;
-    }
-    h2 {
-      color: #2980b9;
-      margin-top: 25px;
-      font-size: 1.2em;
-      text-align: center;
-    }
-    a {
-      color: #e74c3c;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .alert {
-      color: #c0392b;
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
-      font-size: 1em;
-    }
-    .table-container {
-      overflow-x: auto;
-    }
+    h1 { text-align: center; color: #34495e; margin-bottom: 15px; font-size: 1.3em; }
+    h2 { color: #2980b9; margin-top: 20px; font-size: 1.1em; text-align: center; }
+    a { color: #e74c3c; text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
+    .table-container { overflow-x: auto; }
     table {
       border-collapse: collapse;
       width: 100%;
-      margin-top: 15px;
+      margin-top: 10px;
       background: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 0.9em;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      font-size: 0.8em; /* 字體縮小 */
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 8px;
+      padding: 4px; /* 減少內邊距 */
       text-align: center;
       white-space: nowrap;
     }
     th {
       background-color: #3498db;
       color: #fff;
+      font-size: 0.85em;
     }
-    tr:hover {
-      background-color: #f1f1f1;
-    }
+    tr:hover { background-color: #f1f1f1; }
     button {
-      padding: 6px 10px;
-      margin: 2px;
+      padding: 4px 8px; /* 按鈕縮小 */
+      margin: 1px;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       background-color: #27ae60;
       color: #fff;
       cursor: pointer;
-      font-size: 0.85em;
+      font-size: 0.75em;
       transition: background 0.3s;
     }
-    button:hover {
-      background-color: #2ecc71;
-    }
-    .section {
-      margin-top: 25px;
-    }
+    button:hover { background-color: #2ecc71; }
+    .section { margin-top: 20px; }
+    .copy-btn { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
   </style>
 </head>
 <body>
@@ -94,7 +65,6 @@
       🔗 <a href="https://www.c-nexco.co.jp/zh-CHT/" target="_blank">NEXCO 中日本 (繁體中文)</a><br>
       🔗 <a href="https://global.w-nexco.co.jp/tw/" target="_blank">NEXCO 西日本 (繁體中文)</a>
     </p>
-    <div id="alertBox" class="alert"></div>
   </div>
 
   <!-- 行程 IC 對照表 -->
@@ -107,27 +77,45 @@
         </tr>
         <tr>
           <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>Suita IC → 宇治西IC</td>
-          <td><button onclick="copyText('Suita IC → 宇治西IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Suita IC')">入口</button>
+            <button onclick="copyText('宇治西IC')">出口</button>
+          </td>
         </tr>
         <tr>
           <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>Uji-Nishi IC → 津IC</td>
-          <td><button onclick="copyText('Uji-Nishi IC → 津IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Uji-Nishi IC')">入口</button>
+            <button onclick="copyText('津IC')">出口</button>
+          </td>
         </tr>
         <tr>
           <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>Tsu IC → 勢和多氣IC</td>
-          <td><button onclick="copyText('Tsu IC → 勢和多氣IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Tsu IC')">入口</button>
+            <button onclick="copyText('勢和多氣IC')">出口</button>
+          </td>
         </tr>
         <tr>
           <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>Seiwa-Taki IC → 鳥羽IC</td>
-          <td><button onclick="copyText('Seiwa-Taki IC → 鳥羽IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
+            <button onclick="copyText('鳥羽IC')">出口</button>
+          </td>
         </tr>
         <tr>
           <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>Toba IC → 勢和多氣IC</td>
-          <td><button onclick="copyText('Toba IC → 勢和多氣IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Toba IC')">入口</button>
+            <button onclick="copyText('勢和多氣IC')">出口</button>
+          </td>
         </tr>
         <tr>
           <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>Seiwa-Taki IC → 吹田IC</td>
-          <td><button onclick="copyText('Seiwa-Taki IC → 吹田IC')">複製</button></td>
+          <td class="copy-btn">
+            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
+            <button onclick="copyText('吹田IC')">出口</button>
+          </td>
         </tr>
       </table>
     </div>
@@ -154,24 +142,28 @@
   </div>
 
   <script>
-    // 模擬即時封鎖提示 (可改成 API 呼叫)
-    function checkRoadStatus() {
-      let closed = false; // 改成 true 測試提示
-      if (closed) {
-        document.getElementById("alertBox").innerText = "⚠️ 注意：伊勢道部分路段因大雪封閉！";
-      } else {
-        document.getElementById("alertBox").innerText = "";
-      }
-    }
-    setInterval(checkRoadStatus, 5000);
-
-    // 複製功能
+    // 複製功能（入口/出口分開，含回退方案）
     function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert("已複製: " + text);
-      }).catch(err => {
-        alert("複製失敗: " + err);
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("已複製: " + text);
+        }).catch(err => {
+          alert("複製失敗: " + err);
+        });
+      } else {
+        // 回退方案：建立暫時 input
+        let tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+          document.execCommand("copy");
+          alert("已複製: " + text);
+        } catch (err) {
+          alert("複製失敗: " + err);
+        }
+        document.body.removeChild(tempInput);
+      }
     }
   </script>
 </body>
