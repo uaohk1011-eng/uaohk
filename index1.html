@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 手機適配 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ka 日本自駕行程查詢面板</title>
   <style>
     body {
@@ -41,7 +41,7 @@
       font-size: 1em;
     }
     .table-container {
-      overflow-x: auto; /* 手機可橫向滑動表格 */
+      overflow-x: auto;
     }
     table {
       border-collapse: collapse;
@@ -49,13 +49,13 @@
       margin-top: 15px;
       background: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 0.85em;
+      font-size: 0.9em;
     }
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: center;
-      white-space: nowrap; /* 避免文字換行 */
+      white-space: nowrap;
     }
     th {
       background-color: #3498db;
@@ -65,14 +65,14 @@
       background-color: #f1f1f1;
     }
     button {
-      padding: 8px 12px;
+      padding: 6px 10px;
       margin: 2px;
       border: none;
       border-radius: 6px;
       background-color: #27ae60;
       color: #fff;
       cursor: pointer;
-      font-size: 0.9em;
+      font-size: 0.85em;
       transition: background 0.3s;
     }
     button:hover {
@@ -80,12 +80,6 @@
     }
     .section {
       margin-top: 25px;
-    }
-    .copy-btn {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      flex-wrap: wrap; /* 手機自動換行 */
     }
   </style>
 </head>
@@ -109,55 +103,31 @@
     <div class="table-container">
       <table>
         <tr>
-          <th>日期</th><th>路線</th><th>高速道路</th><th>出入口 (中文)</th><th>入口 (英文)</th><th>出口 (英文)</th><th>複製</th>
+          <th>日期</th><th>路線</th><th>高速道路</th><th>出入口</th><th>複製</th>
         </tr>
         <tr>
-          <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>吹田IC / 豊中IC → 宇治西IC</td>
-          <td>Suita IC / Toyonaka IC</td><td>Uji-Nishi IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Suita IC')">入口</button>
-            <button onclick="copyText('Uji-Nishi IC')">出口</button>
-          </td>
+          <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>Suita IC → 宇治西IC</td>
+          <td><button onclick="copyText('Suita IC → 宇治西IC')">複製</button></td>
         </tr>
         <tr>
-          <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>宇治西IC → 津IC</td>
-          <td>Uji-Nishi IC</td><td>Tsu IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Uji-Nishi IC')">入口</button>
-            <button onclick="copyText('Tsu IC')">出口</button>
-          </td>
+          <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>Uji-Nishi IC → 津IC</td>
+          <td><button onclick="copyText('Uji-Nishi IC → 津IC')">複製</button></td>
         </tr>
         <tr>
-          <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>津IC → 勢和多氣IC</td>
-          <td>Tsu IC</td><td>Seiwa-Taki IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Tsu IC')">入口</button>
-            <button onclick="copyText('Seiwa-Taki IC')">出口</button>
-          </td>
+          <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>Tsu IC → 勢和多氣IC</td>
+          <td><button onclick="copyText('Tsu IC → 勢和多氣IC')">複製</button></td>
         </tr>
         <tr>
-          <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>勢和多氣IC → 鳥羽IC</td>
-          <td>Seiwa-Taki IC</td><td>Toba IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
-            <button onclick="copyText('Toba IC')">出口</button>
-          </td>
+          <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>Seiwa-Taki IC → 鳥羽IC</td>
+          <td><button onclick="copyText('Seiwa-Taki IC → 鳥羽IC')">複製</button></td>
         </tr>
         <tr>
-          <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>鳥羽IC → 勢和多氣IC</td>
-          <td>Toba IC</td><td>Seiwa-Taki IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Toba IC')">入口</button>
-            <button onclick="copyText('Seiwa-Taki IC')">出口</button>
-          </td>
+          <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>Toba IC → 勢和多氣IC</td>
+          <td><button onclick="copyText('Toba IC → 勢和多氣IC')">複製</button></td>
         </tr>
         <tr>
-          <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>勢和多氣IC → 吹田IC / 豊中IC</td>
-          <td>Seiwa-Taki IC</td><td>Suita IC / Toyonaka IC</td>
-          <td class="copy-btn">
-            <button onclick="copyText('Seiwa-Taki IC')">入口</button>
-            <button onclick="copyText('Suita IC')">出口</button>
-          </td>
+          <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>Seiwa-Taki IC → 吹田IC</td>
+          <td><button onclick="copyText('Seiwa-Taki IC → 吹田IC')">複製</button></td>
         </tr>
       </table>
     </div>
@@ -193,7 +163,6 @@
         document.getElementById("alertBox").innerText = "";
       }
     }
-    // 每 5 秒自動檢查一次
     setInterval(checkRoadStatus, 5000);
 
     // 複製功能
