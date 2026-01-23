@@ -24,13 +24,12 @@
       margin-top: 10px;
       background: #fff;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      font-size: 0.8em; /* 字體縮小 */
+      font-size: 0.8em;
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 4px; /* 減少內邊距 */
+      padding: 4px;
       text-align: center;
-      white-space: nowrap;
     }
     th {
       background-color: #3498db;
@@ -39,7 +38,7 @@
     }
     tr:hover { background-color: #f1f1f1; }
     button {
-      padding: 4px 8px; /* 按鈕縮小 */
+      padding: 4px 8px;
       margin: 1px;
       border: none;
       border-radius: 4px;
@@ -76,42 +75,60 @@
           <th>日期</th><th>路線</th><th>高速道路</th><th>出入口</th><th>複製</th>
         </tr>
         <tr>
-          <td>1/25</td><td>大阪 → 京都宇治</td><td>名神高速</td><td>Suita IC → 宇治西IC</td>
+          <td>1/25</td>
+          <td>大阪<br>京都宇治</td>
+          <td>名神高速</td>
+          <td>Suita IC<br>宇治西IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Suita IC')">入口</button>
             <button onclick="copyText('宇治西IC')">出口</button>
           </td>
         </tr>
         <tr>
-          <td>1/26</td><td>京都宇治 → 津市</td><td>新名神 → 伊勢灣岸道 → 伊勢道</td><td>Uji-Nishi IC → 津IC</td>
+          <td>1/26</td>
+          <td>京都宇治<br>津市</td>
+          <td>新名神<br>伊勢灣岸道<br>伊勢道</td>
+          <td>Uji-Nishi IC<br>津IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Uji-Nishi IC')">入口</button>
             <button onclick="copyText('津IC')">出口</button>
           </td>
         </tr>
         <tr>
-          <td>1/27</td><td>津市 → Hotel Vison</td><td>伊勢道</td><td>Tsu IC → 勢和多氣IC</td>
+          <td>1/27</td>
+          <td>津市<br>Hotel Vison</td>
+          <td>伊勢道</td>
+          <td>Tsu IC<br>勢和多氣IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Tsu IC')">入口</button>
             <button onclick="copyText('勢和多氣IC')">出口</button>
           </td>
         </tr>
         <tr>
-          <td>1/28</td><td>Hotel Vison → 鳥羽</td><td>伊勢道</td><td>Seiwa-Taki IC → 鳥羽IC</td>
+          <td>1/28</td>
+          <td>Hotel Vison<br>鳥羽</td>
+          <td>伊勢道</td>
+          <td>Seiwa-Taki IC<br>鳥羽IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Seiwa-Taki IC')">入口</button>
             <button onclick="copyText('鳥羽IC')">出口</button>
           </td>
         </tr>
         <tr>
-          <td>1/28</td><td>鳥羽 → Hotel Vison</td><td>伊勢道</td><td>Toba IC → 勢和多氣IC</td>
+          <td>1/28</td>
+          <td>鳥羽<br>Hotel Vison</td>
+          <td>伊勢道</td>
+          <td>Toba IC<br>勢和多氣IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Toba IC')">入口</button>
             <button onclick="copyText('勢和多氣IC')">出口</button>
           </td>
         </tr>
         <tr>
-          <td>1/29</td><td>Hotel Vison → 大阪</td><td>伊勢道 → 伊勢灣岸道 → 新名神 → 名神</td><td>Seiwa-Taki IC → 吹田IC</td>
+          <td>1/29</td>
+          <td>Hotel Vison<br>大阪</td>
+          <td>伊勢道<br>伊勢灣岸道<br>新名神<br>名神</td>
+          <td>Seiwa-Taki IC<br>吹田IC</td>
           <td class="copy-btn">
             <button onclick="copyText('Seiwa-Taki IC')">入口</button>
             <button onclick="copyText('吹田IC')">出口</button>
@@ -134,7 +151,7 @@
           <td>Central Nippon Expressway Pass (CEP)</td>
           <td>5日</td>
           <td>約 10,000–12,000 日圓</td>
-          <td>東名、名神、新名神、伊勢灣岸道、伊勢道</td>
+          <td>東名<br>名神<br>新名神<br>伊勢灣岸道<br>伊勢道</td>
         </tr>
       </table>
     </div>
@@ -151,7 +168,6 @@
           alert("複製失敗: " + err);
         });
       } else {
-        // 回退方案：建立暫時 input
         let tempInput = document.createElement("input");
         tempInput.value = text;
         document.body.appendChild(tempInput);
