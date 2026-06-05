@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>曼谷6天5夜深度自由行 - 互動行程與記帳工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #E05A5A;
+            --secondary: #4ECDC4;
+            --dark: #2F3E46;
+            --light-bg: #F7F9FA;
+            --card-bg: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #757575;
+            --accent: #FFE66D;
+            --transit-bg: #F1F5F9;
+            --transit-border: #CBD5E1;
+            --transit-text: #475569;
+            --alert-bg: #FFF3CD;
+            --alert-border: #FFEBAA;
+            --alert-text: #856404;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', 'Noto Sans TC', sans-serif; background-color: var(--light-bg); color: var(--text-main); line-height: 1.6; padding-bottom: 90px; }
+        header { background: linear-gradient(135deg, #ff7b7b, #ff5252); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); position: sticky; top: 0; z-index: 100; }
+        header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; letter-spacing: 0.5px; }
+        header p { font-size: 0.85rem; opacity: 0.9; }
+        
+        .day-nav { display: flex; overflow-x: auto; white-space: nowrap; padding: 12px 15px; gap: 10px; background: var(--light-bg); position: sticky; top: 79px; z-index: 99; scrollbar-width: none; }
+        .day-nav::-webkit-scrollbar { display: none; }
+        .day-btn { background-color: var(--card-bg); color: var(--dark); border: 1px solid #E0E0E0; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .day-btn.active { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
+        
+        .container-custom { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .main-tab-content { display: none; }
+        .main-tab-content.active { display: block; }
+        
+        .day-section { display: none; }
+        .day-section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .day-title-box { background-color: #34495E; color: white; padding: 12px 15px; border-radius: 14px; margin-bottom: 15px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+        .day-title-box h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+        .day-title-box p { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; margin-bottom: 0; }
+        
+        .timeline { position: relative; padding-left: 20px; border-left: 2px dashed #D1D5DB; margin-left: 10px; }
+        .timeline-item { position: relative; margin-bottom: 15px; }
+        .timeline-badge { position: absolute; left: -29px; top: 2px; width: 16px; height: 16px; background-color: var(--primary); border: 3px solid white; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.3); }
+        
+        .card-custom { background-color: var(--card-bg); border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAEAEA; }
+        .time-tag { display: inline-block; background-color: #EDF2F7; color: #4A5568; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 8px; }
+        .card-title { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; line-height: 1.4; }
+        .card-desc { font-size: 0.88rem; color: #4A5568; margin-bottom: 12px; }
+        
+        .transit-time-block { background-color: var(--transit-bg); border: 1px solid var(--transit-border); border-radius: 12px; padding: 8px 12px; margin: 12px 0 12px 15px; font-size: 0.82rem; color: var(--transit-text); display: flex; align-items: center; gap: 8px; }
+        .alert-block { background-color: var(--alert-bg); border: 1px solid var(--alert-border); border-radius: 10px; padding: 8px 12px; margin-top: 8px; font-size: 0.8rem; color: var(--alert-text); display: flex; align-items: flex-start; gap: 6px; line-height: 1.4; }
+        .alert-block i { margin-top: 3px; font-size: 0.9rem; }
+
+        .card-actions { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-map { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; background-color: #4285F4; color: white; text-decoration: none; padding: 10px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; text-align: center; box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3); transition: background-color 0.2s; }
+        .btn-map:hover { color: white; background-color: #3367D6; }
+        .btn-check { background-color: #EDF2F7; color: #718096; border: none; width: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
+        .btn-check.done { background-color: #DEF7EC; color: #03543F; }
+        
+        .timeline-item.completed .card-custom { opacity: 0.6; background-color: #F8FAFC; }
+        .timeline-item.completed .timeline-badge { background-color: #10B981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3); }
+        
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background-color: white; box-shadow: 0 -4px 10px rgba(0,0,0,0.08); display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
+        .bar-item { display: flex; flex-direction: column; align-items: center; color: #718096; font-size: 0.72rem; text-decoration: none; background: none; border: none; cursor: pointer; width: 25%; height: 100%; justify-content: center; }
+        .bar-item.active { color: var(--primary); font-weight: 600; }
+        .bar-item i { font-size: 1.15rem; margin-bottom: 2px; }
+
+        .accounting-zone { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAEAEA; margin-bottom: 20px; }
+        .accounting-title { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .table-responsive { max-height: 300px; overflow-y: auto; }
+        .badge-hkd { background-color: #EBF8FF; color: #2B6CB0; font-weight: 600; }
+        .badge-thb { background-color: #FEFCBF; color: #975A16; font-weight: 600; }
+
+        .quick-tag { display: inline-block; background-color: #F1F5F9; color: #475569; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 6px; cursor: pointer; user-select: none; transition: all 0.15s ease; border: 1px solid #E2E8F0; }
+        .quick-tag:hover { background-color: #E2E8F0; color: #1E293B; }
+        .quick-tag:active { transform: scale(0.95); }
+
+        /* 出發準備專用樣式 */
+        .prep-checkbox:checked + label { text-decoration: line-through; color: #94A3B8; }
+        .phone-link { text-decoration: none; color: #2563EB; font-weight: 600; }
+        .phone-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🇹🇭 泰精彩：曼谷深度自由行</h1>
+        <p>2026年6月12日 — 6月17日 (6天5夜)</p>
+    </header>
+
+    <div id="tab-itinerary" class="main-tab-content active">
+        <div class="day-nav" id="dayNav">
+            <button class="day-btn active" onclick="switchDay(1)">Day 1</button>
+            <button class="day-btn" onclick="switchDay(2)">Day 2</button>
+            <button class="day-btn" onclick="switchDay(3)">Day 3</button>
+            <button class="day-btn" onclick="switchDay(4)">Day 4</button>
+            <button class="day-btn" onclick="switchDay(5)">Day 5</button>
+            <button class="day-btn" onclick="switchDay(6)">Day 6</button>
+        </div>
+        
+        <div class="container-custom">
+            <div class="day-section active" id="daySection-1">
+                <div class="day-title-box">
+                    <h2>Day 1 | 2026年6月12日 (五)</h2>
+                    <p>抵達曼谷、公寓 check-in、JODD FAIRS 新夜市首探</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-1-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 12:55 - 14:35</span>
+                            <h3 class="card-title">香港國際機場 ✈️ 曼谷萬那普機場 (BKK)</h3>
+                            <p class="card-desc">搭乘泰國航空 TG601 班機前往曼谷。抵達機場後辦理入境，提取託運行李並辦理清關。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 下飛機後請儘快前往 Immigration 護照查驗處，下飛機人潮通常極多，排隊辦理入境約需 30-40 分鐘。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Suvarnabhumi+Airport" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps 導航</a>
+                                <button class="btn-check" onclick="toggleComplete('1-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transit-time-block">
+                        <i class="fas fa-route"></i> <span>下一站交通：乘搭機場快線(ARL)至市區轉地鐵，預計總車程需時 <b>45-60 分鐘</b></span>
+                    </div>
+
+                    <div class="timeline-item" id="item-1-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 15:30 - 18:00</span>
+                            <h3 class="card-title">前往 Somerset Rama 9 辦理入住</h3>
+                            <p class="card-desc"><b>【乘車路線細節】</b>搭乘機場快線 (ARL) 至 Makkasan 站，出站後順著天橋指標步行至 MRT 藍色線的 Phetchaburi 站轉乘，搭乘 1 站至 Phra Ram 9 站下車（請由 3 號出口出站）。<br><br>抵達 Somerset Rama 9 Bangkok 後辦理 Check-in，安置行李並稍作休息、梳洗整備。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 從 ARL 轉乘 MRT 藍色線時需出站重新購票或刷卡（兩者系統不相通）。從 Phra Ram 9 站 3 號出口步行至公寓約 5 分鐘，沿途路面可能稍有不平，拉大行李請注意。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Somerset+Rama+9+Bangkok" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps 導航</a>
+                                <button class="btn-check" onclick="toggleComplete('1-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transit-time-block">
+                        <i class="fas fa-walking"></i> <span>下一站交通：公寓直接步行前往全新拉差達夜市，預計需時 <b>6-8 分鐘</b></span>
+                    </div>
+
+                    <div class="timeline-item" id="item-1-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 18:30 - 22:00</span>
+                            <h3 class="card-title">JODD FAIRS Ratchada (全新拉差達夜市)</h3>
+                            <p class="card-desc">大啖網紅美食火山排骨、生醃海鮮、鮮榨水果冰沙，喝手標泰奶。全新拉差達夜市重磅回歸，規模更大、走道更寬敞好逛！</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 知名火山排骨店家及生醃海鮮非常熱門，入座前請先看清排隊路線與菜單價格。夜市人流密集，請注意保管隨身財物及手機。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Jodd+Fairs+Ratchada" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps 導航</a>
+                                <button class="btn-check" onclick="toggleComplete('1-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section" id="daySection-2">
+                <div class="day-title-box">
+                    <h2>Day 2 | 2026年6月13日 (六)</h2>
+                    <p>泰菜廚藝初體驗、豪華地標 ICONSIAM、侏羅紀沉浸展、河濱碼頭夜市</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-2-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 08:45 - 13:00</span>
+                            <h3 class="card-title">Silom Thai Cooking School 泰菜廚藝教室</h3>
+                            <p class="card-desc">親自下廚初體驗！跟隨老師到在地傳統市場認識泰式香料與選購食材，隨後返回教室親手製作冬蔭功、泰式炒河粉與經典芒果糯米飯。早上 08:45 準時在指定地點集合，逾時不候。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 烹飪課包含市場導覽，早晨天氣較熱且需步行，建議穿著舒適好走且透氣的鞋服。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Silom+Thai+Cooking+School" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('2-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：使用 Grab/Bolt 叫車前往 ICONSIAM，預計需時 <b>20-25 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-2-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 13:30 - 15:30</span>
+                            <h3 class="card-title">ICONSIAM MALL 暹羅天地</h3>
+                            <p class="card-desc">曼谷最頂級的旗艦地標商場。最不容錯過的是一樓的「SOOKSIAM 室內水上市場」，匯集了全泰國 77 府的特色小吃與手工藝品，冷氣開放且乾淨衛生，非常適合拍照打卡與逛街。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 商場範圍極大，若要購買高價物品可至服務台憑護照辦理遊客折扣卡（Tourist Card）獲取額外優惠。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=ICONSIAM" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('2-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-ship"></i> <span>下一站交通：至碼頭搭乘接駁渡輪前往 Asiatique 夜市，預計船程 <b>15 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-2-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 15:30 - 18:00</span>
+                            <h3 class="card-title">侏羅紀世界沉浸式展覽 (Jurassic World)</h3>
+                            <p class="card-desc">位於 Asiatique Warehouse 4。走進好萊塢等級的電影場景中，1:1 比例打造的擬真機械暴龍與凶猛迅猛龍會在你身邊近距離咆哮，體驗前所未有的極致震撼！</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 部分展區燈光較為昏暗且有突如其來的巨大聲響，請放慢腳步觀賞。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Asiatique+The+Riverfront" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('2-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-walking"></i> <span>下一站交通：展覽結束直接抵達夜市核心區 <b>0 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-2-3">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 18:00 - 21:30</span>
+                            <h3 class="card-title">Asiatique The Riverfront 河濱碼頭夜市</h3>
+                            <p class="card-desc">漫步於唯美的湄南河畔，享受夕陽西下的浪漫絕美河景。這裡有知名的曼谷大摩天輪、各種精緻河畔餐廳以及設計感十足的小店，適合慢步調享受曼谷的夜生活。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 回程建議在 21:15 左右提前使用 App 叫車，避開夜市深夜關門時的瘋狂塞車、溢價潮與計程車喊價黑洞。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Asiatique+The+Riverfront" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('2-3')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section" id="daySection-3">
+                <div class="day-title-box">
+                    <h2>Day 3 | 2026年6月14日 (日)</h2>
+                    <p>米其林榮泰船麵 → 瘋逛翟道翟週末市場 → 頂級饗宴 Copper 總店</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-3-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 08:30 - 09:45</span>
+                            <h3 class="card-title">榮泰船麵 (Rung Rueang Pork Noodle)</h3>
+                            <p class="card-desc">曼谷連續多年榮獲米其林必比登推薦的傳奇老字號！湯頭濃郁鮮美、魚丸彈牙，點一碗泰式碎肉粉配上冰鎮魚皮絕對驚艷。建議一定要提早出發，否則早茶時段排隊人潮極長。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 該店只收現金或泰國在地的 QR code 支付，不接受任何信用卡交易，請務必帶足泰銖現鈔。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Rung+Rueang+Pork+Noodle" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('3-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-subway"></i> <span>下一站交通：搭乘 BTS 捷運直達 Mo Chit 站，預計車程 <b>25-30 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-3-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 10:15 - 16:30</span>
+                            <h3 class="card-title">翟道翟週末市場 (Chatuchak Weekend Market)</h3>
+                            <p class="card-desc">全曼谷最大、攤位超過上萬個的半露天極限跳蚤市場。服飾、工藝品、香氛、古著應有盡有。在這裡買東西記得適度殺價，逛累了隨時來杯椰子冰淇淋消暑解渴。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 市場內非常悶熱且範圍極廣，請做好防曬並多補充水分。人潮極為擁擠，小偷非常猖獗，<b>隨身後背包請務必往前背，注意手機皮夾防偷竊！</b></span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Chatuchak+Weekend+Market" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('3-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：前往 Copper 總店。週日傍晚大塞車，車程需時 <b>30-40 分鐘</b>，請務必提早出發！</span></div>
+                    <div class="timeline-item" id="item-3-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 17:30 - 21:00</span>
+                            <h3 class="card-title">Copper Beyond Buffet (創創總店)</h3>
+                            <p class="card-desc">全曼谷最強、最難預約的極致頂級吃到飽饗宴！招牌黑松露和牛濃湯、現烤大頭蝦、頂級炙燒和牛握壽司與各式精緻法式甜點通通無限供應，每一口都是奢華享受。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 該店採取非常嚴格的預約時段制（逾時不候且會直接取消位置並沒收訂金），千萬不要遲到。進場時需出示預約憑證。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Copper+Beyond+Buffet" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('3-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：叫車返回 Rama 9 酒店，預計夜間車程 <b>20-25 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-3-3">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 夜間彈性</span>
+                            <h3 class="card-title">按摩放鬆 / 自由活動時間</h3>
+                            <p class="card-desc">經過白天翟道翟市場的瘋狂步行，晚上推薦在酒店附近找一間評價不錯的平價泰式傳統按摩店（如 One More Massage 或 Let's Relax 分店）好好按個摩、抬個腿放鬆全身肌肉。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Somerset+Rama+9" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('3-3')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section" id="daySection-4">
+                <div class="day-title-box">
+                    <h2>Day 4 | 2026年6月15日 (一)</h2>
+                    <p>文青阿里區美食雙連擊 → 全新美學 dib 藝術館 → 在地釣蝦場初體驗</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-4-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 11:30 - 13:30</span>
+                            <h3 class="card-title">Lay Lao (Ari 文青區總店)</h3>
+                            <p class="card-desc">曼谷文青聚集地「 Ari 區」的明星餐廳，榮獲米其林必比登推薦。主打精緻且道地的泰國東北菜（Isan Cuisine），招牌烤魷魚、青木瓜沙拉配上炭烤豬頸肉，風味層次極其豐富。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Lay+Lao+Ari" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('4-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-walking"></i> <span>下一站交通：直接隔壁步行 <b>1-2 分鐘</b> 續攤</span></div>
+                    <div class="timeline-item" id="item-4-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 13:30 - 14:30</span>
+                            <h3 class="card-title">Khao Soi Ong Tong 泰北金麵</h3>
+                            <p class="card-desc">不用跑清邁也能吃到頂級泰北金麵！同樣是米其林強力推薦，金黃酥脆的炸麵鋪在濃郁的咖哩椰奶雞湯底上，搭配酸菜與紅蔥頭拌勻享用，是極具層次感的曼谷必吃美味。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Ong+Tong+Khao+Soi" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('4-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：前往全新 dib 藝術館，下午時段預計需時 <b>25-30 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-4-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 14:45 - 17:30</span>
+                            <h3 class="card-title">dib bangkok 藝術美學館 & 質感下午茶</h3>
+                            <p class="card-desc">由曼谷舊倉庫改建而成的全新幾何幾何光影美學空間。清水模的冰冷建築與落地窗透進的自然光完美交織，館內充滿現代藝術展品。逛累了可以在裡面的高顏值咖啡廳享受精緻特調咖啡與法式法式甜點，極度適合打卡拍照。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=dib+bangkok" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('4-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：前往室內釣蝦場，正值傍晚下班尖峰嚴重塞車，車程預計 <b>30-40 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-4-3">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 18:00 - 20:30</span>
+                            <h3 class="card-title">บ่อตกกุ้ง 71 Prawn Fishing 室內休閒釣蝦場</h3>
+                            <p class="card-desc">深度體驗泰國在地的夜間消遣！這裡水質清澈、冷氣開放，池底有無數肥美碩大的「泰國大頭蝦」。現場會提供釣具與特製餌料，釣上來的鮮蝦可以現場請師傅直接代客炭烤，香氣四溢、鮮甜多汁！</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 代客料理（炭烤或鹽酥）可能會酌收少許加工費，點單前可先與櫃檯確認。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=71+Prawn+Fishing" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('4-3')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：搭車返回 Rama 9 酒店，預計車程 <b>20-25 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-4-4">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 夜間彈性</span>
+                            <h3 class="card-title">休息 / 酒店周邊足貼按摩</h3>
+                            <p class="card-desc">返回公寓後可自由調配時間，若還有體力可去酒店周圍的便利商店補貨泰國限定零食，或者在房內享受飯店設施，為明天的精華購物與高空酒吧行程儲備體力。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Somerset+Rama+9" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('4-4')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section" id="daySection-5">
+                <div class="day-title-box">
+                    <h2>Day 5 | 2026年6月16日 (二)</h2>
+                    <p>頂級海南雞 → 四面神祈福 → 伴手禮瘋買 → 米其林 MAMA 麵 → 水母酒吧</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-5-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 11:00 - 12:00</span>
+                            <h3 class="card-title">興興海南雞飯 (Heng Heng Chicken Rice)</h3>
+                            <p class="card-desc">曼谷極受在地人追捧的隱藏版海南雞飯。雞肉鮮嫩多汁完全不乾柴，靈魂在於其獨門調配的泰式香辣蘸醬與雞油香氣飽滿的米飯。建議一定要提早抵達，否則中午一到會擠滿周邊的上班族人潮。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Heng+Heng+Chicken+Rice" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('5-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-subway"></i> <span>下一站交通：搭乘 BTS 捷運至 Chit Lom 站，預計車程僅需 <b>10 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-5-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 12:30 - 13:00</span>
+                            <h3 class="card-title">曼谷四面神參拜 (Erawan Shrine)</h3>
+                            <p class="card-desc">全泰國香火最鼎盛、世界聞名的四面神守護地標。依順時針方向虔誠參拜四個面（分別祈求事業、感情、財運、健康）。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 園區內有相當嚴格的服裝限制，<b>請避免穿著過於暴露的衣服（嚴禁膝蓋以上的熱褲、短裙、小背心與深V上衣）。</b>另外，請直接在廟內官方櫃檯購買公價的花圈香燭，切勿理會廟外路邊攤販的推銷以防被高價坑騙。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Erawan+Shrine" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('5-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-walking"></i> <span>下一站交通：順著行人天橋步行 <b>3 分鐘</b> 直達商場核心區</span></div>
+                    <div class="timeline-item" id="item-5-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 13:10 - 18:00</span>
+                            <h3 class="card-title">Central World 旗艦商場 & Let's Relax 頂級大按摩</h3>
+                            <p class="card-desc">曼谷最大的複合式購物中心！在裡面的 Big C 或是超市可以瘋狂採買手信（泰奶茶包、雙槍牌海苔、各式調味泡麵）。採買完後直接前往商場內的 Let's Relax 享受預約好的泰式精油或草藥球按摩，徹底釋放連日來的疲勞。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> Let's Relax 經常一位難求，<b>強烈建議數天前（甚至出發前）先在 Klook 平台預約好精準時段與項目！</b></span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Central+World" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('5-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：前往餐廳。正值全曼谷最恐怖的下班大塞車，強烈預留 <b>25-35 分鐘</b> 叫車時間</span></div>
+                    <div class="timeline-item" id="item-5-3">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 18:30 - 19:30</span>
+                            <h3 class="card-title">Jeh O Chula (傳奇米其林 MAMA 麵海鮮鍋)</h3>
+                            <p class="card-desc">舉世聞名的曼谷深夜宵夜之王！巨無霸海鮮冬蔭功泡麵鍋內擺滿了鮮蝦、魷魚、手工豬肉丸與生雞蛋，酸辣濃郁、過癮至極。雖然表定是宵夜，但傍晚開門時就已經排滿人潮。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 現場實體排隊一般需要 2 小時起跳。<b>強烈建議提前在 Klook 買好帶有特定時段的「快速通關單」</b>，持憑證到現場可以直接切結進場，能省下極其寶貴的旅遊時間！</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Jeh+O+Chula" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('5-3')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：前往高空酒吧，夜間尖峰車程預計需時 <b>25-30 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-5-4">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 20:30 - 23:30</span>
+                            <h3 class="card-title">Tichuca Rooftop Bar (網網紅迷幻水母高空酒吧)</h3>
+                            <p class="card-desc">全曼谷當紅的夜生活朝聖地！位於 T-One 大樓頂層，最醒目的標誌就是那座會隨風與音樂節奏變幻萬千色彩的巨大 LED 幻彩大水母藝術裝置。站在天際線旁俯瞰全曼谷 360 度的璀璨夜景，喝著調酒，氣氛無與倫比。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 該店有極為嚴格的 Dress Code（服裝限制）：<b>嚴禁著運動短褲、背心、任何形式的拖鞋或露趾涼鞋！</b> 請盛裝出席。此外，安檢極嚴，<b>入場必須檢查所有人「護照正本」</b>（手機照片可能不被接受），且不允許攜帶外食與大背包。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Tichuca+Rooftop+Bar" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('5-4')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section" id="daySection-6">
+                <div class="day-title-box">
+                    <h2>Day 6 | 2026年6月17日 (三)</h2>
+                    <p>吞武里海鮮大爆發 → 酒店退房與最後補貨 → 機場返港</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" id="item-6-0">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 08:00 - 11:30</span>
+                            <h3 class="card-title">吞武里海鮮市場 (Thonburi Market Place)</h3>
+                            <p class="card-desc">曼谷在地人的海鮮天堂！這裡環境明亮乾淨、毫無腥味。水族箱裡有無數現撈的巨大泰國大頭蝦、巨型瀨尿蝦與鮮甜生蠔。選好海鮮後直接拿到後方免費炭烤或料理，價格極度親民，保證讓海鮮控大呼過癮！</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 市場位於湄南河西岸，距離市中心稍遠。早晨叫車跨河預計需要 <b>30-40 分鐘</b> 的車程，請注意時間掌控以利中午準時回飯店辦退房。</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Thonburi+Market+Place" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('6-0')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-taxi"></i> <span>下一站交通：叫車返回市區酒店辦理退房，中午路況稍擠，預計車程 <b>35-45 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-6-1">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 11:30 - 14:30</span>
+                            <h3 class="card-title">酒店 Check-out & Central Rama 9 最後總補貨</h3>
+                            <p class="card-desc">回到 Somerset Rama 9 辦理行李退房，並將大件行李暫時寄存於櫃檯。隨後步行到隔壁的 Central Plaza Grand Rama 9 商場進行全旅程最後的伴手禮、藥妝補貨，並在美食街享用在曼谷的最後一頓午餐。</p>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Central+Plaza+Grand+Rama+9" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('6-1')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transit-time-block"><i class="fas fa-subway"></i> <span>下一站交通：回公寓取行李，搭乘地鐵轉機場快線（ARL）直達機場，預計總需時 <b>45 分鐘</b></span></div>
+                    <div class="timeline-item" id="item-6-2">
+                        <div class="timeline-badge"></div>
+                        <div class="card-custom">
+                            <span class="time-tag"><i class="far fa-clock"></i> 14:30 - 22:00</span>
+                            <h3 class="card-title">抵達萬那普機場 ✈️ 順利返港</h3>
+                            <p class="card-desc">返回香港！搭乘泰國航空 TG602 18:10 班機。抵達機場後辦理報到、行李託運及安檢。</p>
+                            <div class="alert-block">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><b>注意：</b> 曼谷萬那普機場離境安檢手續極為繁瑣且經常大排長龍，強烈建議務必提前 3 小時（約 15:10 前）抵達機場。<b>若有購買符合退稅標準的物品，請務必在過海關出境前，先前往機場的退稅辦公室（VAT Refund Office）讓官員在退稅單上蓋章，否則入關後將無法辦理退稅！</b></span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="https://maps.google.com/?q=Suvarnabhumi+Airport" target="_blank" class="btn-map"><i class="fas fa-map-marker-alt"></i> Google Maps</a>
+                                <button class="btn-check" onclick="toggleComplete('6-2')"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-accounting" class="main-tab-content p-3 bootstrap-zone">
+        <div class="container-custom">
+            
+            <div class="accounting-zone">
+                <div class="accounting-title"><i class="fas fa-calculator me-2"></i>即時匯率設定</div>
+                <div class="row g-2 align-items-center">
+                    <div class="col-auto">
+                        <span class="form-text text-dark fw-bold">1 泰幣 (THB) =</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" id="exchangeRate" class="form-control form-control-sm" value="0.22" step="0.001" onchange="updateAccountingCalculations()">
+                    </div>
+                    <div class="col-auto">
+                        <span class="form-text text-dark fw-bold">港幣 (HKD)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accounting-zone">
+                <div class="accounting-title"><i class="fas fa-edit me-2"></i>新增消費紀錄</div>
+                <form id="expenseForm" onsubmit="addExpense(event)">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small text-muted mb-1">日期</label>
+                            <select id="expDate" class="form-select form-select-sm" required>
+                                <option value="2026-06-12">6月12日 (五) Day 1</option>
+                                <option value="2026-06-13">6月13日 (六) Day 2</option>
+                                <option value="2026-06-14">6月14日 (日) Day 3</option>
+                                <option value="2026-06-15">6月15日 (一) Day 4</option>
+                                <option value="2026-06-16">6月16日 (二) Day 5</option>
+                                <option value="2026-06-17">6月17日 (三) Day 6</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted mb-1">付款類別</label>
+                            <select id="expCategory" class="form-select form-select-sm">
+                                <option value="餐飲美食">餐飲美食</option>
+                                <option value="交通車資">交通車資</option>
+                                <option value="飯店住宿">飯店住宿</option>
+                                <option value="景點門票">景點門票</option>
+                                <option value="手信購物">手信購物</option>
+                                <option value="其他支出">其他支出</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted mb-1">消費項目名稱</label>
+                            <input type="text" id="expName" class="form-control form-control-sm mb-1" placeholder="選填，留空將自動帶入類別名稱">
+                            
+                            <div class="py-1">
+                                <span class="quick-tag" onclick="fillQuickTag('泰奶')">🥤 泰奶</span>
+                                <span class="quick-tag" onclick="fillQuickTag('計程車')">🚕 計程車</span>
+                                <span class="quick-tag" onclick="fillQuickTag('地鐵/BTS')">🚇 地鐵/BTS</span>
+                                <span class="quick-tag" onclick="fillQuickTag('7-11')">🏪 7-11</span>
+                                <span class="quick-tag" onclick="fillQuickTag('按摩放鬆')">💆 按摩</span>
+                                <span class="quick-tag" onclick="fillQuickTag('現撈大頭蝦')">🦐 大頭蝦</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted mb-1">付款人</label>
+                            <select id="expPayer" class="form-select form-select-sm">
+                                <option value="Kaho">Kaho</option>
+                                <option value="Susan">Susan</option>
+                                <option value="Pauline">Pauline</option>
+                                <option value="Tina">Tina</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted mb-1">幣別與金額</label>
+                            <div class="input-group input-group-sm">
+                                <select id="expCurrency" class="form-select" style="max-width: 75px;">
+                                    <option value="THB">THB</option>
+                                    <option value="HKD">HKD</option>
+                                </select>
+                                <input type="number" id="expAmount" class="form-control" placeholder="0.00" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-danger btn-sm w-100 fw-bold" style="background-color: var(--primary); border: none;">新增這筆消費</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="accounting-zone">
+                <div class="accounting-title"><i class="fas fa-hand-holding-usd me-2"></i>全體 AA 制平分結算</div>
+                <div class="table-responsive mb-2">
+                    <table class="table table-bordered table-sm text-center align-middle m-0" style="font-size:0.85rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>成員</th>
+                                <th>已付 (泰幣)</th>
+                                <th>已付 (港幣)</th>
+                                <th>折合總支出</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statTableBody">
+                            </tbody>
+                    </table>
+                </div>
+                
+                <div id="settlementResultBlock" class="p-3 bg-light rounded-3 border mt-2" style="font-size:0.88rem;">
+                    </div>
+                <div id="transferInstructionsBlock" class="p-3 rounded-3 border mt-2" style="font-size:0.88rem; background-color: #F0FDF4; border-color: #DCFCE7;">
+                    </div>
+            </div>
+
+            <div class="accounting-zone">
+                <div class="accounting-title"><i class="fas fa-list-ul me-2"></i>消費明細流水帳</div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm align-middle m-0" style="font-size:0.82rem;">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>日期</th>
+                                <th>項目/類別</th>
+                                <th>付款人</th>
+                                <th class="text-end">金額</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="tab-preparation" class="main-tab-content p-3 bootstrap-zone">
+        <div class="container-custom">
+            
+            <div class="accounting-zone">
+                <div class="accounting-title">
+                    <i class="fas fa-clipboard-list text-danger me-2"></i>物品準備備忘清單
+                </div>
+                <p class="text-muted small mb-2">一邊打包一邊勾選，系統會自動幫你計算進度喔！</p>
+                
+                <div class="progress mb-3" style="height: 18px;">
+                    <div id="prepProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%; font-size: 0.75rem; font-weight: bold;">0%</div>
+                </div>
+
+                <div class="list-group list-group-flush" id="prepListGroup">
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-passport" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-passport">🪪 護照正本 (確認有效期 6 個月以上)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-visa" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-visa">🛂 泰國電子簽證/免簽相關文件證明</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-ticket" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-ticket">✈️ 泰國航空來回電子機票 (TG601 / TG602)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-cash" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-cash">💵 泰銖現金 (榮泰船麵、夜市小吃必備現鈔)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-cards" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-cards">💳 信用卡 (出發前確認已開通海外刷卡與提款)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-sun" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-sun">☀️ 夏日防曬用品 (防曬乳、墨鏡、遮陽傘)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-medicine" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-medicine">💊 常備藥品 (腸胃藥、止痛藥、防蚊液、暈車藥)</label>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-1 py-2">
+                        <input class="form-check-input prep-checkbox me-3" type="checkbox" id="prep-hotel" onchange="calculatePrepProgress()">
+                        <label class="form-check-label fw-medium text-dark" for="prep-hotel">🏨 酒店與 Klook 票券憑證 (Somerset/Copper/Jeh O)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accounting-zone">
+                <div class="accounting-title">
+                    <i class="fas fa-phone-alt text-primary me-2"></i>旅泰實用緊急電話
+                </div>
+                <p class="text-muted small mb-3">💡 在手機上點擊下方電話號碼，即可直接撥號。</p>
+                
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-1 py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">🇹🇭 泰國旅遊警察 (有中文服務)</div>
+                            <span class="text-muted small">遺失物品、旅遊糾紛求助專線</span>
+                        </div>
+                        <a href="tel:1155" class="phone-link"><i class="fas fa-phone me-1"></i>1155</a>
+                    </div>
+                    <div class="list-group-item px-1 py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">🚑 泰國醫療急救求助專線</div>
+                            <span class="text-muted small">緊急傷病、叫救護車中心</span>
+                        </div>
+                        <a href="tel:1669" class="phone-link"><i class="fas fa-phone me-1"></i>1669</a>
+                    </div>
+                    <div class="list-group-item px-1 py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">🇭🇰 香港入境事務處 (24小時專線)</div>
+                            <span class="text-muted small">港人在外遇緊急狀況協助</span>
+                        </div>
+                        <a href="tel:+8521868" class="phone-link"><i class="fas fa-phone me-1"></i>+852 1868</a>
+                    </div>
+                    <div class="list-group-item px-1 py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">✈️ 泰國航空 曼谷客服中心</div>
+                            <span class="text-muted small">班機時刻、行李或票務變更詢問</span>
+                        </div>
+                        <a href="tel:+6623561111" class="phone-link"><i class="fas fa-phone me-1"></i>+66 2356 1111</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <button id="navBtn-itinerary" class="bar-item active" onclick="switchMainTab('itinerary')">
+            <i class="fas fa-calendar-alt"></i>
+            <span>每日行程</span>
+        </button>
+        <button id="navBtn-accounting" class="bar-item" onclick="switchMainTab('accounting')">
+            <i class="fas fa-wallet"></i>
+            <span>記帳分帳</span>
+        </button>
+        <button id="navBtn-preparation" class="bar-item" onclick="switchMainTab('preparation')">
+            <i class="fas fa-suitcase shadow-sm"></i>
+            <span>出發準備</span>
+        </button>
+        <button class="bar-item" onclick="handleResetAction()">
+            <i class="fas fa-undo"></i>
+            <span>重置進度</span>
+        </button>
+    </div>
+
+    <script>
+        // --- Tab 分頁切換核心邏輯 ---
+        function switchMainTab(tabName) {
+            document.querySelectorAll('.main-tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.bottom-bar .bar-item').forEach(el => el.classList.remove('active'));
+            
+            if (tabName === 'itinerary') {
+                document.getElementById('tab-itinerary').classList.add('active');
+                document.getElementById('navBtn-itinerary').classList.add('active');
+                const lastDay = localStorage.getItem('currentSelectedDay') || 1;
+                switchDay(parseInt(lastDay));
+            } else if (tabName === 'accounting') {
+                document.getElementById('tab-accounting').classList.add('active');
+                document.getElementById('navBtn-accounting').classList.add('active');
+                updateAccountingCalculations();
+            } else if (tabName === 'preparation') {
+                document.getElementById('tab-preparation').classList.add('active');
+                document.getElementById('navBtn-preparation').classList.add('active');
+                calculatePrepProgress();
+            }
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // --- 行程控制邏輯 ---
+        function switchDay(dayNum) {
+            if (!document.getElementById('tab-itinerary').classList.contains('active')) return;
+            
+            const buttons = document.querySelectorAll('.day-nav .day-btn');
+            buttons.forEach((btn, idx) => {
+                if (idx === (dayNum - 1)) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else { btn.classList.remove('active'); }
+            });
+            const sections = document.querySelectorAll('.day-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(`daySection-${dayNum}`).classList.add('active');
+            localStorage.setItem('currentSelectedDay', dayNum);
+        }
+
+        function toggleComplete(itemId) {
+            const element = document.getElementById(`item-${itemId}`);
+            element.classList.toggle('completed');
+            const isCompleted = element.classList.contains('completed');
+            localStorage.setItem(`status-${itemId}`, isCompleted ? 'true' : 'false');
+            const checkBtn = element.querySelector('.btn-check');
+            if (isCompleted) { checkBtn.classList.add('done'); } else { checkBtn.classList.remove('done'); }
+        }
+
+        // --- 出發準備：進度條動態計算邏輯 ---
+        function calculatePrepProgress() {
+            const checkboxes = document.querySelectorAll('.prep-checkbox');
+            let checkedCount = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) checkedCount++;
+                // 順便把狀態暫存到本地快取中
+                localStorage.setItem(cb.id, cb.checked ? 'true' : 'false');
+            });
+            
+            const progressPercent = checkboxes.length > 0 ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
+            const progressBar = document.getElementById('prepProgressBar');
+            progressBar.style.width = progressPercent + '%';
+            progressBar.innerText = progressPercent + '%';
+        }
+
+        function handleResetAction() {
+            if (document.getElementById('tab-accounting').classList.contains('active')) {
+                if (confirm('確定要刪除所有記帳紀錄，並將匯率恢復預設嗎？')) {
+                    localStorage.removeItem('bk_expenses');
+                    localStorage.removeItem('bk_rate');
+                    document.getElementById('exchangeRate').value = '0.22';
+                    updateAccountingCalculations();
+                }
+            } else if (document.getElementById('tab-preparation').classList.contains('active')) {
+                if (confirm('確定要將所有行李與行李清單的準備進度歸零重新計算嗎？')) {
+                    document.querySelectorAll('.prep-checkbox').forEach(cb => {
+                        cb.checked = false;
+                        localStorage.removeItem(cb.id);
+                    });
+                    calculatePrepProgress();
+                }
+            } else {
+                if (confirm('確定要清除所有已打勾的每日行程進度嗎？')) {
+                    document.querySelectorAll('.timeline-item').forEach(item => {
+                        item.classList.remove('completed');
+                        const cb = item.querySelector('.btn-check');
+                        if (cb) cb.classList.remove('done');
+                        localStorage.removeItem(`status-${item.id.replace('item-', '')}`);
+                    });
+                }
+            }
+        }
+
+        // --- 記帳分賬模組 JavaScript 邏輯 ---
+        const members = ['Kaho', 'Susan', 'Pauline', 'Tina'];
+
+        function getExpenses() {
+            return JSON.parse(localStorage.getItem('bk_expenses')) || [];
+        }
+        function saveExpenses(data) {
+            localStorage.setItem('bk_expenses', JSON.stringify(data));
+        }
+
+        function fillQuickTag(tagName) {
+            document.getElementById('expName').value = tagName;
+        }
+
+        // 頁面初始化狀態載入
+        window.addEventListener('DOMContentLoaded', () => {
+            // 行程狀態恢復
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                const id = item.id.replace('item-', '');
+                if (localStorage.getItem(`status-${id}`) === 'true') {
+                    item.classList.add('completed');
+                    const cb = item.querySelector('.btn-check');
+                    if (cb) cb.classList.add('done');
+                }
+            });
+            const lastDay = localStorage.getItem('currentSelectedDay');
+            if (lastDay) { switchDay(parseInt(lastDay)); }
+
+            // 出發準備清單狀態恢復
+            document.querySelectorAll('.prep-checkbox').forEach(cb => {
+                if (localStorage.getItem(cb.id) === 'true') {
+                    cb.checked = true;
+                }
+            });
+            calculatePrepProgress();
+
+            // 匯率載入
+            const savedRate = localStorage.getItem('bk_rate');
+            if (savedRate) {
+                document.getElementById('exchangeRate').value = savedRate;
+            }
+            updateAccountingCalculations();
+        });
+
+        function addExpense(e) {
+            e.preventDefault();
+            const date = document.getElementById('expDate').value;
+            const category = document.getElementById('expCategory').value;
+            let name = document.getElementById('expName').value.trim();
+            const payer = document.getElementById('expPayer').value;
+            const currency = document.getElementById('expCurrency').value;
+            const amount = parseFloat(document.getElementById('expAmount').value);
+
+            if (isNaN(amount) || amount <= 0) return;
+
+            // 名稱為空自動帶入付款類別
+            if (!name) {
+                name = category;
+            }
+
+            const records = getExpenses();
+            const newRecord = {
+                id: Date.now().toString(),
+                date: date.substring(5),
+                category: category,
+                name: name,
+                payer: payer,
+                currency: currency,
+                amount: amount
+            };
+
+            records.push(newRecord);
+            saveExpenses(records);
+
+            document.getElementById('expName').value = '';
+            document.getElementById('expAmount').value = '';
+
+            updateAccountingCalculations();
+        }
+
+        function deleteExpense(id) {
+            let records = getExpenses();
+            records = records.filter(item => item.id !== id);
+            saveExpenses(records);
+            updateAccountingCalculations();
+        }
+
+        function updateAccountingCalculations() {
+            const rate = parseFloat(document.getElementById('exchangeRate').value) || 0.22;
+            localStorage.setItem('bk_rate', rate);
+            
+            const records = getExpenses();
+            const stats = {};
+            members.forEach(m => {
+                stats[m] = { THB: 0, HKD: 0, totalConvertedHKD: 0 };
+            });
+
+            const historyBody = document.getElementById('historyTableBody');
+            historyBody.innerHTML = '';
+
+            records.forEach(item => {
+                if (stats[item.payer]) {
+                    stats[item.payer][item.currency] += item.amount;
+                }
+
+                const badgeClass = item.currency === 'HKD' ? 'badge-hkd' : 'badge-thb';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.date}</td>
+                    <td><div class="fw-bold">${item.name}</div><span class="text-muted" style="font-size:0.7rem;">#${item.category}</span></td>
+                    <td><span class="badge bg-secondary opacity-75">${item.payer}</span></td>
+                    <td class="text-end fw-bold"><span class="badge ${badgeClass} me-1">${item.currency}</span>$${item.amount.toFixed(1)}</td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-danger btn-sm py-0 px-2" onclick="deleteExpense('${item.id}')"><i class="fas fa-trash-alt" style="font-size:0.75rem;"></i></button>
+                    </td>
+                `;
+                historyBody.appendChild(row);
+            });
+
+            if (records.length === 0) {
+                historyBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">目前還沒有任何記帳明細喔！</td></tr>`;
+            }
+
+            let groupTotalHKD = 0;
+            const statBody = document.getElementById('statTableBody');
+            statBody.innerHTML = '';
+
+            members.forEach(m => {
+                const converted = (stats[m].THB * rate) + stats[m].HKD;
+                stats[m].totalConvertedHKD = converted;
+                groupTotalHKD += converted;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold">${m}</td>
+                    <td class="text-muted">฿${stats[m].THB.toFixed(1)}</td>
+                    <td class="text-muted">$${stats[m].HKD.toFixed(1)}</td>
+                    <td class="fw-bold text-dark">$${converted.toFixed(2)}</td>
+                `;
+                statBody.appendChild(tr);
+            });
+
+            const avgPayloadHKD = groupTotalHKD / 4;
+            const settlementDiv = document.getElementById('settlementResultBlock');
+            
+            let settlementHTML = `
+                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom fw-bold">
+                    <span>團隊總花費 (港幣)：$${groupTotalHKD.toFixed(2)}</span>
+                    <span class="text-danger">每人應付：$${avgPayloadHKD.toFixed(2)}</span>
+                </div>
+            `;
+
+            let debtors = [];
+            let creditors = [];
+
+            members.forEach(m => {
+                const diff = stats[m].totalConvertedHKD - avgPayloadHKD;
+                if (diff > 0.005) {
+                    settlementHTML += `
+                        <div class="d-flex justify-content-between align-items-center text-success my-1 fw-medium">
+                            <span><i class="fas fa-arrow-alt-circle-down me-1"></i><b>${m}</b> 實際支付較多</span>
+                            <span>需收回 <b>$${diff.toFixed(2)}</b> HKD</span>
+                        </div>`;
+                    creditors.push({ name: m, amount: diff });
+                } else if (diff < -0.005) {
+                    settlementHTML += `
+                        <div class="d-flex justify-content-between align-items-center text-danger my-1 fw-medium">
+                            <span><i class="fas fa-arrow-alt-circle-up me-1"></i><b>${m}</b> 實際支付較少</span>
+                            <span>需補付 <b>$${Math.abs(diff).toFixed(2)}</b> HKD</span>
+                        </div>`;
+                    debtors.push({ name: m, amount: Math.abs(diff) });
+                } else {
+                    settlementHTML += `
+                        <div class="d-flex justify-content-between align-items-center text-muted my-1">
+                            <span><i class="fas fa-check-circle me-1"></i><b>${m}</b> 收支完美平衡</span>
+                            <span>$0.00</span>
+                        </div>`;
+                }
+            });
+            settlementDiv.innerHTML = settlementHTML;
+
+            const transferBlock = document.getElementById('transferInstructionsBlock');
+            let transferHTML = `<div class="fw-bold text-success mb-2"><i class="fas fa-exchange-alt me-2"></i>💡 最終轉帳結算指引 (港幣結算)</div>`;
+            
+            let instructions = [];
+            let dIdx = 0, cIdx = 0;
+
+            while (dIdx < debtors.length && cIdx < creditors.length) {
+                let debtor = debtors[dIdx];
+                let creditor = creditors[cIdx];
+
+                let settlementAmount = Math.min(debtor.amount, creditor.amount);
+                
+                if (settlementAmount > 0.01) {
+                    instructions.push(`💵 <b>${debtor.name}</b> 需轉帳給 <b>${creditor.name}</b>：<b class="text-danger">$${settlementAmount.toFixed(2)}</b> HKD`);
+                }
+
+                debtor.amount -= settlementAmount;
+                creditor.amount -= settlementAmount;
+
+                if (debtor.amount <= 0.01) dIdx++;
+                if (creditor.amount <= 0.01) cIdx++;
+            }
+
+            if (instructions.length === 0) {
+                transferHTML += `<div class="text-muted" style="font-size:0.85rem;">帳目完全平衡，目前不需要進行任何轉帳！</div>`;
+            } else {
+                transferHTML += instructions.join('<br>');
+            }
+            transferBlock.innerHTML = transferHTML;
+        }
+    </script>
+</body>
+</html>
